@@ -3,21 +3,29 @@
 # Contributor: Alexey Andreyev <aa13q@ya.ru>
 # Maintainer: James Kittsmiller (AJSlye) <james@nulogicsystems.com>
 
-
 pkgname=libqofonoext
-pkgver=1.0.30
+pkgver=1.0.31
 pkgrel=1
 pkgdesc="A Qt library for accessing nemomobile specific ofono extensions"
 arch=('x86_64' 'aarch64')
 url="https://github.com/sailfishos/libqofonoext"
 license=('LGPL-2.1-only')
-depends=('libqofono-qt5>=0.101')
-source=("${url}/archive/refs/tags/$pkgver.tar.gz")
-sha256sums=('f971732a80263cf05c8e85c37eac22b0ef2d10cc10b48bafdce0f3dd7440a25e')
+depends=('libqofono-qt6>=0.101')
+source=("${url}/archive/refs/tags/$pkgver.tar.gz"
+    '0001-Q_ENUMS-cannot-be-use-signed-long-long.patch'
+)
+sha256sums=('2b521bee1062dcb9ff54a120e64e618642f7f7a3d30d8d1b27093dada0b2f94e'
+    'bd22b034ade1a3c0c7651c45aaaf06fef43eb2f620f5f8aeb075af944343e324'
+)
+
+prepare() {
+    cd $pkgname-$pkgver
+    patch -p1 --input="${srcdir}/0001-Q_ENUMS-cannot-be-use-signed-long-long.patch"
+}
 
 build() {
     cd $pkgname-$pkgver
-    qmake
+    qmake6
     make
 }
 
